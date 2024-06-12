@@ -53,10 +53,24 @@ export const StorageService = (db: DB, env: Env) => {
                     );
                     const hash = buf2hex(hashArray)
                     const hashkey = path.join(folder, hash + "." + suffix);
+                    
+                    // 改用telegram 上传，注释掉原有代码
+                    // try {
+                    //     const response = await s3.send(new PutObjectCommand({ Bucket: bucket, Key: hashkey, Body: file }))
+                    //     console.info(response);
+                    //     return `${accessHost}/${bucket}/${hashkey}`
+                    // } catch (e: any) {
+                    //     set.status = 400;
+                    //     console.error(e.message)
+                    //     return e.message
+                    // }
+                    const host = `https://telegra.ph`;
+                    const formData = new FormData();
+                    formData.append("file", file as Blob, hashkey);
                     try {
-                        const response = await s3.send(new PutObjectCommand({ Bucket: bucket, Key: hashkey, Body: file }))
-                        console.info(response);
-                        return `${accessHost}/${bucket}/${hashkey}`
+                        const responseFromTele = await fetch(`${host}/upload`, { method: "POST", body: formData });
+                        const responseJson = await responseFromTele.json();
+                        return responseJson[0].src;
                     } catch (e: any) {
                         set.status = 400;
                         console.error(e.message)
