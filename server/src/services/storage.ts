@@ -56,7 +56,7 @@ export const StorageService = (db: DB, env: Env) => {
                     try {
                         const response = await s3.send(new PutObjectCommand({ Bucket: bucket, Key: hashkey, Body: file }))
                         console.info(response);
-                        return `${accessHost}/${hashkey}`
+                        return `${accessHost}/${bucket}/${hashkey}`
                     } catch (e: any) {
                         set.status = 400;
                         console.error(e.message)
