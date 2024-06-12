@@ -13,6 +13,7 @@ function buf2hex(buffer: ArrayBuffer) {
 }
 
 export const StorageService = (db: DB, env: Env) => {
+    const host = `https://telegra.ph`;
     const endpoint = env.S3_ENDPOINT;
     const bucket = env.S3_BUCKET;
     const folder = env.S3_FOLDER || '';
@@ -22,9 +23,12 @@ export const StorageService = (db: DB, env: Env) => {
     const s3 = createS3Client(env);
     return new Elysia({ aot: false })
         .use(setup(db, env))
-        .group('/storage', (group) =>
+        .group('/', (group) =>
             group
-                .post('/', async ({ uid, set, body: { key, file } }) => {
+                .get('/file/:fileName', async ({params: {fileName}}) => {
+                    return fetch(`${host}/file/${fileName}`);
+                })
+                .post('/storage', async ({ uid, set, body: { key, file } }) => {
 
                     if (!endpoint) {
                         set.status = 500;
@@ -64,7 +68,7 @@ export const StorageService = (db: DB, env: Env) => {
                     //     console.error(e.message)
                     //     return e.message
                     // }
-                    const host = `https://telegra.ph`;
+                    
                     const formData = new FormData();
                     formData.append("file", file as Blob, hashkey);
                     try {
