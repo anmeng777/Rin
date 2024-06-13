@@ -15,8 +15,29 @@ import { RSSService } from './services/rss';
 const host = `https://telegra.ph`;
 
 export const app = (db: DB, env: Env) => new Elysia({ aot: false })
-    .get('/test', () => {
-        return fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
+    .get('/test', async () => {
+        // return fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
+        // Fetch the resource
+        const response = await fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
+
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+        }
+
+        // Create a new Response object to ensure headers can be manipulated
+        const newResponse = new Response(await response.blob(), {
+            status: response.status,
+            statusText: response.statusText,
+            headers: {
+                // You may need to explicitly set some headers important for the client here,
+                // especially if they are needed for correct content handling (e.g., Content-Type).
+                // Example:
+                // 'Content-Type': response.headers.get('Content-Type'),
+            },
+        });
+
+        return newResponse;
     })
     .use(cors({
         aot: false,
