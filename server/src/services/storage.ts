@@ -24,13 +24,9 @@ export const StorageService = (db: DB, env: Env) => {
     return new Elysia({ aot: false })
         .use(setup(db, env))
         .get('/file/:fileName', async ({params: {fileName}}) => {
-            return new Response(new Blob([fileName]), {
-                status: 302,
-                headers: {
-                    Location: `${host}/file/${fileName}`
-                }
-            });
             // return fetch(`${host}/file/${fileName}`);
+            // 反向代理返回${host}/file/${fileName}图片流
+            return await fetch(`${host}/file/${fileName}`);
         }, {
             params: t.Object({
                 fileName: t.String()
