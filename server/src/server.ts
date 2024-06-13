@@ -39,7 +39,9 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
     .use(SEOService(env))
     .use(RSSService(env))
     .get('/', () => `Hi`)
-    .get('/test', () => `Hi`)
+    .get('/test', () => {
+        return fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
+    })
     // .get('/file/:fileName', async ({params: {fileName}}) => {
     //     return fetch(`${host}/file/${fileName}`);
     // }, {
