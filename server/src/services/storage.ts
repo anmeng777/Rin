@@ -24,7 +24,13 @@ export const StorageService = (db: DB, env: Env) => {
     return new Elysia({ aot: false })
         .use(setup(db, env))
         .get('/file/:fileName', async ({params: {fileName}}) => {
-            return fetch(`${host}/file/${fileName}`);
+            return new Response(new Blob([fileName]), {
+                status: 302,
+                headers: {
+                    Location: `${host}/file/${fileName}`
+                }
+            });
+            // return fetch(`${host}/file/${fileName}`);
         }, {
             params: t.Object({
                 fileName: t.String()
@@ -78,7 +84,7 @@ export const StorageService = (db: DB, env: Env) => {
                     try {
                         const responseFromTele = await fetch(`${host}/upload`, { method: "POST", body: formData });
                         const responseJson = await responseFromTele.json();
-                        return responseJson[0].src;
+                        return 'https://rin-server.anmeng.tech' + responseJson[0].src;
                     } catch (e: any) {
                         set.status = 400;
                         console.error(e.message)
