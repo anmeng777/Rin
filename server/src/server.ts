@@ -39,13 +39,13 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
     .use(SEOService(env))
     .use(RSSService(env))
     .get('/', () => `Hi`)
-    .get('/file/:fileName', async ({params: {fileName}}) => {
-        return fetch(`${host}/file/${fileName}`);
-    }, {
-        params: t.Object({
-            fileName: t.String()
-        })
-    })
+    // .get('/file/:fileName', async ({params: {fileName}}) => {
+    //     return fetch(`${host}/file/${fileName}`);
+    // }, {
+    //     params: t.Object({
+    //         fileName: t.String()
+    //     })
+    // })
     .onError(({ path, params, code }) => {
         if (code === 'NOT_FOUND')
             return `${path} ${JSON.stringify(params)} not found`
