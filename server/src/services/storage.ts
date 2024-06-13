@@ -23,13 +23,6 @@ export const StorageService = (db: DB, env: Env) => {
     const s3 = createS3Client(env);
     return new Elysia({ aot: false })
         .use(setup(db, env))
-        .get('/file/:fileName', async ({params: {fileName}}) => {
-            return fetch(`${host}/file/${fileName}`);
-        }, {
-            params: t.Object({
-                fileName: t.String()
-            })
-        })
         .group('/storage', (group) =>
             group
                 .post('/', async ({ uid, set, body: { key, file } }) => {

@@ -12,20 +12,21 @@ import { StorageService } from './services/storage';
 import { SEOService } from './services/seo';
 import { RSSService } from './services/rss';
 
+const host = `https://telegra.ph`;
+
 export const app = (db: DB, env: Env) => new Elysia({ aot: false })
-    // .use(cors({
-    //     aot: false,
-    //     origin: '*',
-    //     methods: '*',
-    //     allowedHeaders: [
-    //         'Authorization',
-    //         'content-type'
-    //     ],
-    //     maxAge: 600,
-    //     credentials: true,
-    //     preflight: true
-    // }))
-    .use(cors())
+    .use(cors({
+        aot: false,
+        origin: '*',
+        methods: '*',
+        allowedHeaders: [
+            'Authorization',
+            'content-type'
+        ],
+        maxAge: 600,
+        credentials: true,
+        preflight: true
+    }))
     .use(serverTiming({
         enabled: true,
     }))
@@ -38,6 +39,13 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
     .use(SEOService(env))
     .use(RSSService(env))
     .get('/', () => `Hi`)
+    .get('/file/:fileName', async ({params: {fileName}}) => {
+        return fetch(`${host}/file/${fileName}`);
+    }, {
+        params: t.Object({
+            fileName: t.String()
+        })
+    })
     .onError(({ path, params, code }) => {
         if (code === 'NOT_FOUND')
             return `${path} ${JSON.stringify(params)} not found`
