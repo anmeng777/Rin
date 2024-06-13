@@ -15,6 +15,9 @@ import { RSSService } from './services/rss';
 const host = `https://telegra.ph`;
 
 export const app = (db: DB, env: Env) => new Elysia({ aot: false })
+    .get('/test', () => {
+        return fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
+    })
     .use(cors({
         aot: false,
         origin: '*',
@@ -27,9 +30,6 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
         credentials: true,
         preflight: true
     }))
-    .get('/test', () => {
-        return fetch(`https://telegra.ph/file/44f30de6accd493b205c8.png`);
-    })
     .use(serverTiming({
         enabled: true,
     }))
