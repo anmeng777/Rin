@@ -13,18 +13,19 @@ import { SEOService } from './services/seo';
 import { RSSService } from './services/rss';
 
 export const app = (db: DB, env: Env) => new Elysia({ aot: false })
-    .use(cors({
-        aot: false,
-        origin: '*',
-        methods: '*',
-        allowedHeaders: [
-            'Authorization',
-            'content-type'
-        ],
-        maxAge: 600,
-        credentials: true,
-        preflight: true
-    }))
+    // .use(cors({
+    //     aot: false,
+    //     origin: '*',
+    //     methods: '*',
+    //     allowedHeaders: [
+    //         'Authorization',
+    //         'content-type'
+    //     ],
+    //     maxAge: 600,
+    //     credentials: true,
+    //     preflight: true
+    // }))
+    .use(cors())
     .use(serverTiming({
         enabled: true,
     }))
