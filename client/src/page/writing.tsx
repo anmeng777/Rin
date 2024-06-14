@@ -1,6 +1,7 @@
 import "@uiw/react-markdown-preview/markdown.css";
 import MDEditor, { ContextStore, getCommands, TextAreaTextApi } from '@uiw/react-md-editor';
 import "@uiw/react-md-editor/markdown-editor.css";
+import './writting.css'
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Checkbox, Input } from '../components/input';
