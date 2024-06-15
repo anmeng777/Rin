@@ -4,7 +4,7 @@ import path from "node:path";
 import type { DB } from "../_worker";
 import type { Env } from "../db/db";
 import { setup } from "../setup";
-import { createS3Client } from "../utils/s3";
+// import { createS3Client } from "../utils/s3";
 
 function buf2hex(buffer: ArrayBuffer) {
     return [...new Uint8Array(buffer)]
