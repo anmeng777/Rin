@@ -1,4 +1,4 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+// import { PutObjectCommand } from "@aws-sdk/client-s3";
 import Elysia, { t } from "elysia";
 import path from "node:path";
 import type { DB } from "../_worker";
@@ -12,15 +12,21 @@ function buf2hex(buffer: ArrayBuffer) {
         .join('');
 }
 
+// 首先，定义接口来描述 JSON 数组中的每一个对象结构
+interface ImageResponse {
+    src: string; // 假设每个对象有一个名为 'src' 的字符串属性
+    // 如果有其他属性，也可以在这里添加
+}
+
 export const StorageService = (db: DB, env: Env) => {
     const host = `https://telegra.ph`;
     const endpoint = env.S3_ENDPOINT;
     const bucket = env.S3_BUCKET;
     const folder = env.S3_FOLDER || '';
-    const accessHost = env.S3_ACCESS_HOST || endpoint;
+    // const accessHost = env.S3_ACCESS_HOST || endpoint;
     const accessKeyId = env.S3_ACCESS_KEY_ID;
     const secretAccessKey = env.S3_SECRET_ACCESS_KEY;
-    const s3 = createS3Client(env);
+    // const s3 = createS3Client(env);
     return new Elysia({ aot: false })
         .use(setup(db, env))
         .group('/storage', (group) =>
@@ -70,7 +76,7 @@ export const StorageService = (db: DB, env: Env) => {
                     formData.append("file", file as Blob, hashkey);
                     try {
                         const responseFromTele = await fetch(`${host}/upload`, { method: "POST", body: formData });
-                        const responseJson = await responseFromTele.json();
+                        const responseJson:ImageResponse[] = await responseFromTele.json();
                         return 'https://rin-server.anmeng.tech' + responseJson[0].src;
                     } catch (e: any) {
                         set.status = 400;
