@@ -1,16 +1,15 @@
 import cors from '@elysiajs/cors';
 import { serverTiming } from '@elysiajs/server-timing';
 import { Elysia } from 'elysia';
-import type { DB } from './_worker';
-import type { Env } from './db/db';
 import { CommentService } from './services/comments';
 import { FeedService } from './services/feed';
 import { FriendService } from './services/friends';
+import { RSSService } from './services/rss';
+import { SEOService } from './services/seo';
+import { StorageService } from './services/storage';
 import { TagService } from './services/tag';
 import { UserService } from './services/user';
-import { StorageService } from './services/storage';
-import { SEOService } from './services/seo';
-import { RSSService } from './services/rss';
+import { ConfigService } from './services/config';
 
 const host = `https://telegra.ph`;
 
@@ -20,7 +19,7 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
         origin: '*',
         methods: '*',
         allowedHeaders: [
-            'Authorization',
+            'authorization',
             'content-type'
         ],
         maxAge: 600,
@@ -30,14 +29,15 @@ export const app = (db: DB, env: Env) => new Elysia({ aot: false })
     .use(serverTiming({
         enabled: true,
     }))
-    .use(UserService(db, env))
-    .use(FeedService(db, env))
-    .use(CommentService(db, env))
-    .use(TagService(db))
-    .use(StorageService(db, env))
-    .use(FriendService(db, env))
-    .use(SEOService(env))
-    .use(RSSService(env))
+    .use(UserService())
+    .use(FeedService())
+    .use(CommentService())
+    .use(TagService())
+    .use(StorageService())
+    .use(FriendService())
+    .use(SEOService())
+    .use(RSSService())
+    .use(ConfigService())
     .get('/', () => `Hi`)
     // .get('/file/:fileName', async ({params: {fileName}}) => {
     //     return fetch(`${host}/file/${fileName}`);
