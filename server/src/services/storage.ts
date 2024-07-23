@@ -17,7 +17,7 @@ interface ImageResponse {
     // 如果有其他属性，也可以在这里添加
 }
 
-export const StorageService = (db: DB, env: Env) => {
+export const StorageService = (/*db: DB, */env: Env) => {
     const host = `https://telegra.ph`;
     const endpoint = env.S3_ENDPOINT;
     const bucket = env.S3_BUCKET;

@@ -13,7 +13,7 @@ import { ConfigService } from './services/config';
 
 const host = `https://telegra.ph`;
 
-export const app = (db: DB, env: Env) => new Elysia({ aot: false })
+export const app = (/*db: DB, env: Env*/) => new Elysia({ aot: false })
     .use(cors({
         aot: false,
         origin: '*',
